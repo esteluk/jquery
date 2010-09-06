@@ -136,6 +136,13 @@ jQuery.fn.extend({
 
 					// Make sure that nothing sneaks out
 					opt.overflow = this.style.overflow;
+					
+					// Detect inline-block standard, pre ie8 fix, and pre Firefox 3 fix
+					opt.ibCheck = (jQuery.css(this,"display") === "inline-block") ||
+						(jQuery.css(this,"zoom") !== "normal" && jQuery.css(this,"display") === "inline") ||
+						(jQuery.css(this,"display") === "-moz-inline-stack") ||
+						(jQuery.css(this,"display") === "none");
+							
 				}
 
 				if ( jQuery.isArray( prop[p] ) ) {
@@ -303,7 +310,7 @@ jQuery.fx.prototype = {
 		(jQuery.fx.step[this.prop] || jQuery.fx.step._default)( this );
 
 		// Set display property to block for height/width animations
-		if ( ( this.prop === "height" || this.prop === "width" ) && this.elem.style ) {
+		if ( ( this.prop === "height" || this.prop === "width" ) && this.elem.style && !this.options.ibCheck) {
 			this.elem.style.display = "block";
 		}
 	},
